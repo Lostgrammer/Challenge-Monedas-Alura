@@ -24,7 +24,7 @@ public class Currency {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        
+
     }
 
 
