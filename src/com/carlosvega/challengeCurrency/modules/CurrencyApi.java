@@ -1,4 +1,6 @@
 package com.carlosvega.challengeCurrency.modules;
 
-public record CurrencyApi() {
+import java.util.Map;
+
+public record CurrencyApi(Map <String, Double> conversionRates) {
 }

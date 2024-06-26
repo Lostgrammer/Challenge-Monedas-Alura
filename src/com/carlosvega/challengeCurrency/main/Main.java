@@ -9,7 +9,8 @@ public class Main {
         Scanner input = new Scanner(System.in);
         String testLink;
         int userChoice;
-        String secondValue;
+        String comparedValue;
+        String appAnswer;
         String initialMessage = "***************************************************\n" +
                 "Sea bienvenido al conversor de moneda\n" +
                 "Elija el tipo de cambio que desea realizar: \n" +
@@ -29,9 +30,13 @@ public class Main {
         userChoice = input.nextInt();
         input.nextLine();
         System.out.println(valueMessage);
-        secondValue = input.nextLine();
+        comparedValue = input.nextLine();
+
         //metodo que reciba ambos valores para hacer operaciones
-        //obj1.convertidor(userChoice, secondValue)
+        Currency newcurrency = new Currency();
+        appAnswer = newcurrency.compareCurrency(userChoice,comparedValue);
+        System.out.println(appAnswer);
+
 
 //        String currencyCode = input.nextLine();
 //        Currency currency = new Currency();
