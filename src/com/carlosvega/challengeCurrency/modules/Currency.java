@@ -15,8 +15,14 @@ import java.util.Map;
 public class Currency {
 
     private String baseUrl = "https://v6.exchangerate-api.com/v6/e3faad7790933299afb32ed2/latest/";
+    private String usdCode = "usd";
+    private String pesoArgentinaCode = "ars";
+    private String realBrazilCode = "brl";
+    private String pespColombiaCode = "cop";
+    private String comparedCurrencyCode;
 
-    public CurrencyApi searchConvertionRate(String comparedCurrencyCode){
+    public CurrencyApi searchConvertionRate(int userChoice){
+        this.comparedCurrencyCode = setCurrencyCode(userChoice);
         URI address = URI.create(this.baseUrl + comparedCurrencyCode);
 
         HttpClient client = HttpClient.newHttpClient();
@@ -33,13 +39,17 @@ public class Currency {
             throw new RuntimeException(e);
         }
     }
-//    //methods
-//    public String setCurrencyCode(int userChoice){
-//        if (userChoice == 1 || userChoice == 3 || userChoice == 5) return "usd";
-//        else if (userChoice == 1) {
-//
-//        }
-//        return "";
-//    }
+    //methods
+    public String setCurrencyCode(int userChoice){
+        if (userChoice == 1 || userChoice == 3 || userChoice == 5) return usdCode;
+        else if (userChoice == 2) {
+            return pesoArgentinaCode;
+        } else if (userChoice == 4) {
+            return realBrazilCode;
+        }else if (userChoice == 6) {
+            return pespColombiaCode;
+        }
+        return "";
+    }
 
 }
