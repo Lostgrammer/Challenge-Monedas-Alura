@@ -1,5 +1,6 @@
 package com.carlosvega.challengeCurrency.modules;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,15 +13,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Currency {
+
     private String baseUrl = "https://v6.exchangerate-api.com/v6/e3faad7790933299afb32ed2/latest/";
-    //Map<String, Double> conversionRates;
-    String convertion;
-    private String json;
-    private Gson gson = new GsonBuilder()
-            .setPrettyPrinting()//para ordenar el json
-            .create();
-    public String test (String currencyuCode){
-        URI address = URI.create(this.baseUrl += currencyuCode);
+
+    public CurrencyApi searchConvertionRate(String comparedCurrencyCode){
+        URI address = URI.create(this.baseUrl + comparedCurrencyCode);
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(address)
@@ -28,33 +26,20 @@ public class Currency {
         try {
             HttpResponse<String> response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
-            return response.body();
+            return new Gson().fromJson(response.body(), CurrencyApi.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
     }
-    //metodo para determinar el valor que opcion se escogio
-
-    public String compareCurrency(int userChoice, String secondValue){
-        URI address = URI.create(this.baseUrl+"mxn");
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(address)
-                .build();
-        try {
-            HttpResponse<String> response = client
-                    .send(request, HttpResponse.BodyHandlers.ofString());
-            //return response.body();
-            json = response.body();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        return "";
-    }
+//    //methods
+//    public String setCurrencyCode(int userChoice){
+//        if (userChoice == 1 || userChoice == 3 || userChoice == 5) return "usd";
+//        else if (userChoice == 1) {
+//
+//        }
+//        return "";
+//    }
 
 }
