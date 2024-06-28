@@ -34,6 +34,6 @@ public class Main {
 
         //metodo que reciba ambos valores para hacer operaciones
         Currency newCurrency = new Currency();
-        System.out.println(newCurrency.searchConvertionRate("mxn"));
+        System.out.println(newCurrency.searchConvertionRate(userChoice));
     }
 }
