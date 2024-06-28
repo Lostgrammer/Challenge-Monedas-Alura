@@ -33,14 +33,7 @@ public class Main {
         comparedValue = input.nextLine();
 
         //metodo que reciba ambos valores para hacer operaciones
-        Currency newcurrency = new Currency();
-        appAnswer = newcurrency.compareCurrency(userChoice,comparedValue);
-        System.out.println(appAnswer);
-
-
-//        String currencyCode = input.nextLine();
-//        Currency currency = new Currency();
-//        testLink = currency.test(currencyCode);
-//        System.out.println(testLink);
+        Currency newCurrency = new Currency();
+        System.out.println(newCurrency.searchConvertionRate("mxn"));
     }
 }
