@@ -1,55 +1,48 @@
 package com.carlosvega.challengeCurrency.modules;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Currency {
 
-    private String baseUrl = "https://v6.exchangerate-api.com/v6/e3faad7790933299afb32ed2/latest/";
+    private int quantity;
     private String usdCode = "usd";
     private String pesoArgentinaCode = "ars";
     private String realBrazilCode = "brl";
-    private String pespColombiaCode = "cop";
-    private String comparedCurrencyCode;
+    private String pesoColombiaCode = "cop";
+    private Map <String, Double> conversion_rates;
+    private String base_code;
 
-    public CurrencyApi searchConvertionRate(int userChoice){
-        this.comparedCurrencyCode = setCurrencyCode(userChoice);
-        URI address = URI.create(this.baseUrl + comparedCurrencyCode);
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(address)
-                .build();
-        try {
-            HttpResponse<String> response = client
-                    .send(request, HttpResponse.BodyHandlers.ofString());
-            return new Gson().fromJson(response.body(), CurrencyApi.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    //constructor
+    public Currency(CurrencyApi currencyApi){
+        this.base_code = currencyApi.base_code();
+        this.conversion_rates = currencyApi.conversion_rates();
     }
+
+    //getter and setter
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     //methods
-    public String setCurrencyCode(int userChoice){
-        if (userChoice == 1 || userChoice == 3 || userChoice == 5) return usdCode;
-        else if (userChoice == 2) {
+    public String secondCurrencyChoice(int userChoice){
+        if (userChoice == 2 || userChoice == 4 || userChoice == 6) return usdCode;
+        else if (userChoice == 1) {
             return pesoArgentinaCode;
-        } else if (userChoice == 4) {
+        } else if (userChoice == 3) {
             return realBrazilCode;
-        }else if (userChoice == 6) {
-            return pespColombiaCode;
+        }else if (userChoice == 5) {
+            return pesoColombiaCode;
         }
         return "";
+    }
+
+    public void currencyRate(){
+        System.out.println(base_code);
+        conversion_rates.forEach((currency, rate)->
+                System.out.println(currency + " " +rate));
     }
 
 }
