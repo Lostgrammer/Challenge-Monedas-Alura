@@ -2,7 +2,7 @@ package com.carlosvega.challengeCurrency.modules;
 
 public class Address{
     private String baseUrl = "https://v6.exchangerate-api.com/v6/e3faad7790933299afb32ed2/latest/";
-    private int userChoice;
+    private int userChoice = 0;
     private String usdCode = "usd";
     private String pesoArgentinaCode = "ars";
     private String realBrazilCode = "brl";
@@ -15,6 +15,19 @@ public class Address{
     }
     public void setUserChoice(int userChoice) {
         this.userChoice = userChoice;
+    }
+
+    public String getUsdCode() {
+        return usdCode;
+    }
+    public String getPesoArgentinaCode() {
+        return pesoArgentinaCode;
+    }
+    public String getRealBrazilCode() {
+        return realBrazilCode;
+    }
+    public String getPesoColombiaCode() {
+        return pesoColombiaCode;
     }
 
     public String getUrl(){
