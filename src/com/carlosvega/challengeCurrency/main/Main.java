@@ -1,16 +1,25 @@
 package com.carlosvega.challengeCurrency.main;
 
+import com.carlosvega.challengeCurrency.modules.Address;
 import com.carlosvega.challengeCurrency.modules.Currency;
+import com.carlosvega.challengeCurrency.modules.CurrencyApi;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()//para ordenar el json
+                .create();
         Scanner input = new Scanner(System.in);
-        String testLink;
-        int userChoice;
-        String comparedValue;
-        String appAnswer;
+        String json;
         String initialMessage = "***************************************************\n" +
                 "Sea bienvenido al conversor de moneda\n" +
                 "Elija el tipo de cambio que desea realizar: \n" +
@@ -25,15 +34,42 @@ public class Main {
                 "Su opcion es: ";
         String valueMessage = "Escriba la cantidad que desea convertir";
 
-        //init app
-        System.out.print(initialMessage);
-        userChoice = input.nextInt();
-        input.nextLine();
-        System.out.println(valueMessage);
-        comparedValue = input.nextLine();
 
-        //metodo que reciba ambos valores para hacer operaciones
-        Currency newCurrency = new Currency();
-        System.out.println(newCurrency.searchConvertionRate(userChoice));
+        //http request and response
+        Address address = new Address();
+        //init program
+        System.out.print(initialMessage);
+        address.setUserChoice(input.nextInt());
+        input.nextLine();
+
+        URI addressURI = URI.create(address.getUrl());
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(addressURI)
+                .build();
+        HttpResponse<String> response = client
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        json = response.body();
+
+        //deserialization
+        CurrencyApi currencyApi = gson.fromJson(json,CurrencyApi.class);
+        //init app
+        Currency newCurrency = new Currency(currencyApi);
+        //init message
+//        System.out.print(initialMessage);
+//        newCurrency.setUserChoice(input.nextInt());
+//        input.nextLine();
+        System.out.println(valueMessage);
+        newCurrency.setQuantity(input.nextInt());
+        input.nextLine();
+        newCurrency.currencyRate();
+
+//        //deserealizado en CurrencyApi
+//        //System.out.println(newCurrency.searchConvertionRate());
+//        json = newCurrency.searchConvertionRate(); //seria rate
+//        newCurrency.currencyRate(json);
+//        //metodo que recibe el json para ubicar el tipo de cambio
+
+
     }
 }
