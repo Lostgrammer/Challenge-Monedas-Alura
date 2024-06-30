@@ -50,25 +50,17 @@ public class Main {
         HttpResponse<String> response = client
                 .send(request, HttpResponse.BodyHandlers.ofString());
         json = response.body();
-
         //deserialization
         CurrencyApi currencyApi = gson.fromJson(json,CurrencyApi.class);
-        //init app
+
         Currency newCurrency = new Currency(currencyApi);
-        //init message
-//        System.out.print(initialMessage);
-//        newCurrency.setUserChoice(input.nextInt());
-//        input.nextLine();
         System.out.println(valueMessage);
         newCurrency.setQuantity(input.nextInt());
         input.nextLine();
-        newCurrency.currencyRate();
 
-//        //deserealizado en CurrencyApi
-//        //System.out.println(newCurrency.searchConvertionRate());
-//        json = newCurrency.searchConvertionRate(); //seria rate
-//        newCurrency.currencyRate(json);
-//        //metodo que recibe el json para ubicar el tipo de cambio
+        newCurrency.currencyRate();
+        newCurrency.secondCurrencyChoice(address);
+        newCurrency.currencyRate1();
 
 
     }

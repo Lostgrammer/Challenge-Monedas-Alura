@@ -1,16 +1,15 @@
 package com.carlosvega.challengeCurrency.modules;
 
+import java.util.Iterator;
 import java.util.Map;
 
 public class Currency {
 
     private int quantity;
-    private String usdCode = "usd";
-    private String pesoArgentinaCode = "ars";
-    private String realBrazilCode = "brl";
-    private String pesoColombiaCode = "cop";
     private Map <String, Double> conversion_rates;
     private String base_code;
+    String secundaryCureencyChoice;
+    double currencyRate;
 
     //constructor
     public Currency(CurrencyApi currencyApi){
@@ -27,22 +26,32 @@ public class Currency {
     }
 
     //methods
-    public String secondCurrencyChoice(int userChoice){
-        if (userChoice == 2 || userChoice == 4 || userChoice == 6) return usdCode;
+    public void secondCurrencyChoice(Address address){
+        int userChoice = address.getUserChoice();
+        if (userChoice == 2 || userChoice == 4 || userChoice == 6) secundaryCureencyChoice = address.getUsdCode();
         else if (userChoice == 1) {
-            return pesoArgentinaCode;
+            secundaryCureencyChoice = address.getPesoArgentinaCode();
         } else if (userChoice == 3) {
-            return realBrazilCode;
+            secundaryCureencyChoice = address.getRealBrazilCode();
         }else if (userChoice == 5) {
-            return pesoColombiaCode;
+            secundaryCureencyChoice = address.getPesoColombiaCode();
         }
-        return "";
     }
 
     public void currencyRate(){
         System.out.println(base_code);
         conversion_rates.forEach((currency, rate)->
                 System.out.println(currency + " " +rate));
+    }
+    //choose value similar secondchoice variable and get rate
+    public void currencyRate1(){
+        Iterator it = conversion_rates.keySet().iterator();
+        while (it.hasNext()){
+            String key = (String) it.next();
+            if (key.equalsIgnoreCase(secundaryCureencyChoice)){
+                System.out.println(key + " +  " + conversion_rates.get(key));
+            }
+        }
     }
 
 }
