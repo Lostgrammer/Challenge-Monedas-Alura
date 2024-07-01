@@ -5,27 +5,26 @@ import java.util.Map;
 
 public class Currency {
 
-    private int quantity;
+    //variables
+    private int quantity = 0;
     private Map <String, Double> conversion_rates;
-    String secundaryCureencyChoice;
-    double currencyRate;
-    private String userCurrencyChoice;
-    private double resultConvertion;
+    String secundaryCureencyChoice = "";
+    double currencyRate = 0;
+    private String userCurrencyChoice = "";
+    private double resultConvertion = 0;
 
     //constructor
     public Currency(CurrencyApi currencyApi){
         this.conversion_rates = currencyApi.conversion_rates();
     }
 
-    //getter and setter
-    public int getQuantity() {
-        return quantity;
-    }
+    //setter
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
     //methods
+    //set value of secundaryCureencyChoice
     public void secondCurrencyChoice(Address address){
         userCurrencyChoice = address.getUserCurrencyChoice();
         int userChoice = address.getUserChoice();
@@ -38,9 +37,7 @@ public class Currency {
             secundaryCureencyChoice = address.getPesoColombiaCode();
         }
     }
-
-
-    //choose value similar secondchoice variable and get rate
+    //found currency rate according to choice
     public void currencyRate(){
         Iterator it = conversion_rates.keySet().iterator();
         while (it.hasNext()){
@@ -50,11 +47,11 @@ public class Currency {
             }
         }
     }
-
+    //set value of the convertion result
     public void resultConvertion(){
         resultConvertion = quantity * currencyRate;
     }
-
+    //print message
     public void convertionResultMessage(){
         currencyRate();
         resultConvertion();
@@ -63,5 +60,4 @@ public class Currency {
                 "] corresponde al valor de final de =>>> " +
                  resultConvertion + "[" + secundaryCureencyChoice.toUpperCase() + "]");
     }
-
 }

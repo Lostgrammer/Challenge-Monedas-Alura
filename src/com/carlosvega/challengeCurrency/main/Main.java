@@ -18,6 +18,7 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         //variables
         int valueExitProgram = 7;
+        int userChoice;
         Scanner input = new Scanner(System.in);
         String json;
         String initialMessage = "***************************************************\n" +
@@ -38,12 +39,11 @@ public class Main {
                 .setPrettyPrinting()
                 .create();
 
+        //init program
         do{
-            //init program
             System.out.print(initialMessage);
             try {
                 //read user choice
-                int userChoice;
                 address.setUserChoice(input.nextInt());
                 input.nextLine();
                 userChoice = address.getUserChoice();
@@ -59,14 +59,13 @@ public class Main {
                     HttpResponse<String> response = client
                             .send(request, HttpResponse.BodyHandlers.ofString());
                     json = response.body();
-                    //deserialization
+                    //new object with record json api
                     CurrencyApi currencyApi = gson.fromJson(json,CurrencyApi.class);
-
                     Currency newCurrency = new Currency(currencyApi);
+                    //print next intructions
                     System.out.println(valueMessage);
                     newCurrency.setQuantity(input.nextInt());
                     input.nextLine();
-
                     newCurrency.secondCurrencyChoice(address);
                     newCurrency.convertionResultMessage();
                     //if want to finish program
@@ -78,11 +77,10 @@ public class Main {
                     address.tryAgain();
                 }
             }catch (InputMismatchException e){
+                //invalid input exception
                 address.tryAgain();
                 input.nextLine();
             }
         }while(address.getUserChoice() != valueExitProgram);
     }
 }
-
-
