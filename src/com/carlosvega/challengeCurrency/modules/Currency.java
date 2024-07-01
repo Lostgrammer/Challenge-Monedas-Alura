@@ -7,13 +7,13 @@ public class Currency {
 
     private int quantity;
     private Map <String, Double> conversion_rates;
-    private String base_code;
     String secundaryCureencyChoice;
     double currencyRate;
+    private String userCurrencyChoice;
+    private double resultConvertion;
 
     //constructor
     public Currency(CurrencyApi currencyApi){
-        this.base_code = currencyApi.base_code();
         this.conversion_rates = currencyApi.conversion_rates();
     }
 
@@ -27,6 +27,7 @@ public class Currency {
 
     //methods
     public void secondCurrencyChoice(Address address){
+        userCurrencyChoice = address.getUserCurrencyChoice();
         int userChoice = address.getUserChoice();
         if (userChoice == 2 || userChoice == 4 || userChoice == 6) secundaryCureencyChoice = address.getUsdCode();
         else if (userChoice == 1) {
@@ -38,20 +39,29 @@ public class Currency {
         }
     }
 
-    public void currencyRate(){
-        System.out.println(base_code);
-        conversion_rates.forEach((currency, rate)->
-                System.out.println(currency + " " +rate));
-    }
+
     //choose value similar secondchoice variable and get rate
-    public void currencyRate1(){
+    public void currencyRate(){
         Iterator it = conversion_rates.keySet().iterator();
         while (it.hasNext()){
             String key = (String) it.next();
             if (key.equalsIgnoreCase(secundaryCureencyChoice)){
-                System.out.println(key + " +  " + conversion_rates.get(key));
+                currencyRate = conversion_rates.get(key);
             }
         }
+    }
+
+    public void resultConvertion(){
+        resultConvertion = quantity * currencyRate;
+    }
+
+    public void convertionResultMessage(){
+        currencyRate();
+        resultConvertion();
+        System.out.println("El valor de " + quantity + " [" +
+                userCurrencyChoice.toUpperCase() +
+                "] corresponde al valor de final de =>>> " +
+                 resultConvertion + "[" + secundaryCureencyChoice.toUpperCase() + "]");
     }
 
 }

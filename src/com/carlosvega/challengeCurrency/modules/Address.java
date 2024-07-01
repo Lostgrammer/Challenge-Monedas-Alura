@@ -8,6 +8,7 @@ public class Address{
     private String realBrazilCode = "brl";
     private String pesoColombiaCode = "cop";
     private String comparedCurrencyCode;
+    private String userCurrencyChoice;
 
     //getters setters
     public int getUserChoice() {
@@ -29,6 +30,9 @@ public class Address{
     public String getPesoColombiaCode() {
         return pesoColombiaCode;
     }
+    public String getUserCurrencyChoice() {
+        return userCurrencyChoice;
+    }
 
     public String getUrl(){
         this.comparedCurrencyCode = setCurrencyCode();
@@ -38,15 +42,22 @@ public class Address{
     //methods
     public String setCurrencyCode(){
         int userChoice = getUserChoice();
-        if (userChoice == 1 || userChoice == 3 || userChoice == 5) return usdCode;
+        if (userChoice == 1 || userChoice == 3 || userChoice == 5) userCurrencyChoice = usdCode;
         else if (userChoice == 2) {
-            return pesoArgentinaCode;
+            userCurrencyChoice = pesoArgentinaCode;
         } else if (userChoice == 4) {
-            return realBrazilCode;
+            userCurrencyChoice = realBrazilCode;
         }else if (userChoice == 6) {
-            return pesoColombiaCode;
+            userCurrencyChoice = pesoColombiaCode;
+        }else if (userChoice == 7) {
+            finishProgram();
+        }else {
+            System.out.println("Error intentelo nuevamente");
         }
-        return "";
+        return userCurrencyChoice;
+    }
+    public void finishProgram(){
+        System.out.println("Finalizado el programa, gracias por su visita :)");
     }
 
 }
