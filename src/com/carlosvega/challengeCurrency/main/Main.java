@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
+        int valueExitProgram = 7;
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()//para ordenar el json
                 .create();
@@ -37,31 +38,41 @@ public class Main {
 
         //http request and response
         Address address = new Address();
-        //init program
-        System.out.print(initialMessage);
-        address.setUserChoice(input.nextInt());
-        input.nextLine();
 
-        URI addressURI = URI.create(address.getUrl());
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(addressURI)
-                .build();
-        HttpResponse<String> response = client
-                .send(request, HttpResponse.BodyHandlers.ofString());
-        json = response.body();
-        //deserialization
-        CurrencyApi currencyApi = gson.fromJson(json,CurrencyApi.class);
+        do{
+            //init program
+            System.out.print(initialMessage);
+            address.setUserChoice(input.nextInt());
+            input.nextLine();
+            if (address.getUserChoice() > valueExitProgram || address.getUserChoice() <= 0 ){
+                continue;
+            } else if (address.getUserChoice() != valueExitProgram) {
+                URI addressURI = URI.create(address.getUrl());
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(addressURI)
+                        .build();
+                HttpResponse<String> response = client
+                        .send(request, HttpResponse.BodyHandlers.ofString());
+                json = response.body();
+                //deserialization
+                CurrencyApi currencyApi = gson.fromJson(json,CurrencyApi.class);
 
-        Currency newCurrency = new Currency(currencyApi);
-        System.out.println(valueMessage);
-        newCurrency.setQuantity(input.nextInt());
-        input.nextLine();
+                Currency newCurrency = new Currency(currencyApi);
+                System.out.println(valueMessage);
+                newCurrency.setQuantity(input.nextInt());
+                input.nextLine();
 
-        newCurrency.currencyRate();
-        newCurrency.secondCurrencyChoice(address);
-        newCurrency.currencyRate1();
+                newCurrency.secondCurrencyChoice(address);
+                newCurrency.convertionResultMessage();
+            }
+//            else {
+//                break;
+//            }
 
 
+        }while(address.getUserChoice() != valueExitProgram);
     }
 }
+
+
