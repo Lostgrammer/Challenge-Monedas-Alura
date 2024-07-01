@@ -44,9 +44,8 @@ public class Main {
             System.out.print(initialMessage);
             address.setUserChoice(input.nextInt());
             input.nextLine();
-            if (address.getUserChoice() > valueExitProgram || address.getUserChoice() <= 0 ){
-                continue;
-            } else if (address.getUserChoice() != valueExitProgram) {
+            int userChoice = address.getUserChoice();
+            if (userChoice < valueExitProgram && userChoice > 0 ){
                 URI addressURI = URI.create(address.getUrl());
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
@@ -65,10 +64,12 @@ public class Main {
 
                 newCurrency.secondCurrencyChoice(address);
                 newCurrency.convertionResultMessage();
+            } else if (address.getUserChoice() == valueExitProgram) {//si es igual a la opcion de salir
+                address.finishProgram();
+                break;
+            }else {
+                address.tryAgain();
             }
-//            else {
-//                break;
-//            }
 
 
         }while(address.getUserChoice() != valueExitProgram);
