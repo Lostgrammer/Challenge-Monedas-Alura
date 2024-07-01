@@ -11,14 +11,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
+        //variables
         int valueExitProgram = 7;
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()//para ordenar el json
-                .create();
         Scanner input = new Scanner(System.in);
         String json;
         String initialMessage = "***************************************************\n" +
@@ -34,44 +33,54 @@ public class Main {
                 "***************************************************\n" +
                 "Su opcion es: ";
         String valueMessage = "Escriba la cantidad que desea convertir";
-
-
-        //http request and response
         Address address = new Address();
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
 
         do{
             //init program
             System.out.print(initialMessage);
-            address.setUserChoice(input.nextInt());
-            input.nextLine();
-            int userChoice = address.getUserChoice();
-            if (userChoice < valueExitProgram && userChoice > 0 ){
-                URI addressURI = URI.create(address.getUrl());
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(addressURI)
-                        .build();
-                HttpResponse<String> response = client
-                        .send(request, HttpResponse.BodyHandlers.ofString());
-                json = response.body();
-                //deserialization
-                CurrencyApi currencyApi = gson.fromJson(json,CurrencyApi.class);
-
-                Currency newCurrency = new Currency(currencyApi);
-                System.out.println(valueMessage);
-                newCurrency.setQuantity(input.nextInt());
+            try {
+                //read user choice
+                int userChoice;
+                address.setUserChoice(input.nextInt());
                 input.nextLine();
+                userChoice = address.getUserChoice();
+                //choice between options
+                if (userChoice < valueExitProgram && userChoice > 0 ){
+                    ///http request
+                    URI addressURI = URI.create(address.getUrl());
+                    HttpClient client = HttpClient.newHttpClient();
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(addressURI)
+                            .build();
+                    //http response
+                    HttpResponse<String> response = client
+                            .send(request, HttpResponse.BodyHandlers.ofString());
+                    json = response.body();
+                    //deserialization
+                    CurrencyApi currencyApi = gson.fromJson(json,CurrencyApi.class);
 
-                newCurrency.secondCurrencyChoice(address);
-                newCurrency.convertionResultMessage();
-            } else if (address.getUserChoice() == valueExitProgram) {//si es igual a la opcion de salir
-                address.finishProgram();
-                break;
-            }else {
+                    Currency newCurrency = new Currency(currencyApi);
+                    System.out.println(valueMessage);
+                    newCurrency.setQuantity(input.nextInt());
+                    input.nextLine();
+
+                    newCurrency.secondCurrencyChoice(address);
+                    newCurrency.convertionResultMessage();
+                    //if want to finish program
+                } else if (address.getUserChoice() == valueExitProgram) {
+                    address.finishProgram();
+                    break;
+                }else {
+                    //invalid option
+                    address.tryAgain();
+                }
+            }catch (InputMismatchException e){
                 address.tryAgain();
+                input.nextLine();
             }
-
-
         }while(address.getUserChoice() != valueExitProgram);
     }
 }
