@@ -49,8 +49,6 @@ public class Address{
             userCurrencyChoice = realBrazilCode;
         }else if (userChoice == 6) {
             userCurrencyChoice = pesoColombiaCode;
-        }else if (userChoice == 7) {
-            finishProgram();
         }else {
             System.out.println("Error intentelo nuevamente");
         }
@@ -58,6 +56,9 @@ public class Address{
     }
     public void finishProgram(){
         System.out.println("Finalizado el programa, gracias por su visita :)");
+    }
+    public void tryAgain(){
+        System.out.println("Opcion invalida, intentelo nuevamente");
     }
 
 }
